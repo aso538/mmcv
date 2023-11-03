@@ -598,7 +598,12 @@ class RandomChoice(BaseTransform):
     def transform(self, results: Dict) -> Optional[Dict]:
         """Randomly choose a transform to apply."""
         idx = self.random_pipeline_index()
+        results['random_choice_idx'] = idx
         return self.transforms[idx](results)
+
+    def reverse(self, results: Dict) -> Optional[Dict]:
+        idx = results['random_choice_idx']
+        return self.transforms[idx](results, True)
 
     def __repr__(self) -> str:
         repr_str = self.__class__.__name__
