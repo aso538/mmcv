@@ -7,8 +7,9 @@ class BaseTransform(metaclass=ABCMeta):
     """Base class for all transformations."""
 
     def __call__(self,
-                 results: Dict) -> Optional[Union[Dict, Tuple[List, List]]]:
-
+                 results: Dict, reverse: bool = False) -> Optional[Union[Dict, Tuple[List, List]]]:
+        if reverse:
+            return self.reverse(results)
         return self.transform(results)
 
     @abstractmethod
@@ -28,3 +29,15 @@ class BaseTransform(metaclass=ABCMeta):
         Returns:
             dict: The result dict.
         """
+
+    def reverse(self, results: Dict) -> Optional[Union[Dict, Tuple[List, List]]]:
+        """The reverse function. All subclasses of BaseTransform that require
+        reverse should override this method.
+
+        Args:
+            results (dict): The result dict.
+
+        Returns:
+            dict: The result dict.
+        """
+        return results

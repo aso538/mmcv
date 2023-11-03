@@ -1554,6 +1554,9 @@ class RandomResize(BaseTransform):
         results = self.resize(results)
         return results
 
+    def reverse(self, results: Dict) -> Optional[Union[Dict, Tuple[List, List]]]:
+        return self.resize.reverse(results)
+
     def __repr__(self) -> str:
         repr_str = self.__class__.__name__
         repr_str += f'(scale={self.scale}, '

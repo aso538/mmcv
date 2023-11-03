@@ -28,6 +28,7 @@ try:
 except ImportError:
     from contextlib import contextmanager
 
+
     @contextmanager  # type: ignore
     def nullcontext(resource=None):
         try:
@@ -86,6 +87,13 @@ class Compose(BaseTransform):
         """
         for t in self.transforms:
             results = t(results)  # type: ignore
+            if results is None:
+                return None
+        return results
+
+    def reverse(self, results: Dict) -> Optional[Dict]:
+        for t in reversed(self.transforms):
+            results = t(results, True)  # type: ignore
             if results is None:
                 return None
         return results
@@ -566,7 +574,6 @@ class RandomChoice(BaseTransform):
     def __init__(self,
                  transforms: List[Union[Transform, List[Transform]]],
                  prob: Optional[List[float]] = None):
-
         super().__init__()
 
         if prob is not None:
